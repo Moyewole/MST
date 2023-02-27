@@ -313,28 +313,28 @@ double UndirectedGraph::prim()
     {
    //     priority_q.print_tree();
         vertex* v = priority_q.extract_min();
-    //     cout << "Vertex distance is: " << v->key << endl;
+         cout << "Vertex distance is: " << v->key << endl;
          length += v->key;
-    //    cout << "Vertex out is: " << v->name << endl;
+        cout << "Vertex out is: " << v->name << endl;
         S.insert(v);
         for (auto it = v->adj.begin(); it != v->adj.end(); ++it)
         {
             vertex* w = it->first;
             double l = it->second;
-    //        cout << "W is: " << w->name << endl;
-    //        cout << "length to w is: " << l << endl;
+            cout << "W is: " << w->name << endl;
+            cout << "length to w is: " << l << endl;
             
             if (S.count(w)) {
-        //        cout << "w in set already" << endl;
+                cout << "w in set already" << endl;
                 continue;
             }
-      //      cout << "w->key is: " << w->key << endl;
+            cout << "w->key is: " << w->key << endl;
 
             if (w->key > l) 
             {
-            //    cout << "Updating w" << endl;
+                cout << "Updating w" << endl;
                 w->key = l;
-            //    cout << "l is: " << l << endl;
+                cout << "l is: " << l << endl;
                 // TODO: Update prev[] if we get to add this feature
                 priority_q.insert(w);
 
@@ -353,7 +353,7 @@ double UndirectedGraph::prim()
 int main() 
 {
 
-    const int N = 200;
+    const int N = 7;
     const int dim = 2;
     assert(dim > 0 && dim <= 4);
     UndirectedGraph myGraph(dim);
@@ -387,6 +387,7 @@ int main()
   // Add edges
     for (auto a= myGraph.vertices.begin(); a != myGraph.vertices.end(); a++)
     {
+        //cout << "Coordinates of Source are: (" << a->x << "," << a->y << "," << a->z << "," << a->w << ") " << endl;
 
         for(auto b = myGraph.vertices.begin(); b != myGraph.vertices.end(); b++)
         {
@@ -395,10 +396,11 @@ int main()
                 continue;
             }
             double l = sqrt(pow((b->x - a->x), 2) + pow((b->y - a->y), 2) + pow((b->z - a->z), 2) + pow((b->w - a->w), 2));
-            if (l > 200/N) {
+            if (l > 16000/N) {
                 continue;
             } else{
                 myGraph.draw_edge(&(*a), &(*b), l);
+                cout << "New Edge (" << a->name << ", " << b->name << ", length = " << l << ") " << endl;
                 stats_v.push_back(l);
 
             }
@@ -406,10 +408,30 @@ int main()
         }
     }
 
+     vector<double> all_possible_sums;
+
+     for (size_t i = 0; i < stats_v.size()-2; i++)
+     {
+         for (size_t j = i+1; j < stats_v.size()-1; j++)
+         {
+             for (size_t k = j+1; k < stats_v.size(); k++)
+             {  
+                 cout << i << " " << j << " " << k << endl;
+                 all_possible_sums.push_back(stats_v[i]+ stats_v[j] + stats_v[k]);
+             }
+         }
+     }
+    
+     for(auto it = all_possible_sums.begin(); it != all_possible_sums.end(); it++)
+     {
+         cout << *it << endl;
+     }
+
+ //   cout << "MINIMUM IS: " << *min_element(all_possible_sums.begin(), all_possible_sums.end()) << endl;
 
 
     // Now execute prim's algorithm
-    double first = 
+   // double first = 
     cout << myGraph.prim() << endl;
   
     
